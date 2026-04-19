@@ -66,14 +66,6 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 
-	/* Verifica se todas as chaves obrigatórias estão presentes */
-	if (!validate_dict(dict))
-	{
-		free_dict(dict);
-		ft_putstr("Dict Error \n");
-		return (1);
-	}
-
 	/* Converte o número para palavras */
 	if (!write_number(dict, n))
 	{

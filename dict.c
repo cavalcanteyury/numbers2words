@@ -9,17 +9,6 @@
 #include "dict.h"
 
 /*
-** Lista das 32 chaves que o algoritmo de conversão precisa obrigatoriamente.
-** 'static' aqui significa que essa variável só existe dentro deste arquivo.
-*/
-static unsigned long long	g_required[] = {
-	0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
-	10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-	20, 30, 40, 50, 60, 70, 80, 90,
-	100, 1000, 1000000, 1000000000ULL
-};
-
-/*
 ** Libera toda a memória alocada pelo dicionário.
 ** Percorre a lista nó a nó, liberando o valor (string) e depois o nó.
 */
@@ -151,22 +140,3 @@ t_entry	*parse_dict(const char *content)
 	return (dict);
 }
 
-/*
-** Verifica se todas as 32 chaves obrigatórias estão presentes no dicionário.
-** Retorna 1 se válido, 0 se alguma chave estiver faltando.
-*/
-int	validate_dict(t_entry *dict)
-{
-	int	count;
-	int	i;
-
-	count = (int)(sizeof(g_required) / sizeof(g_required[0]));
-	i = 0;
-	while (i < count)
-	{
-		if (!dict_lookup(dict, g_required[i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}
