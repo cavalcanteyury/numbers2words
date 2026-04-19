@@ -23,13 +23,13 @@
 **   apenas "t_entry" é usado; "s_entry" existe só para resolver esse
 **   problema de referência circular.
 */
-typedef struct s_entry          /* ← nome da struct, usado só internamente */
+typedef struct s_entry /* ← nome da struct, usado só internamente */
 {
-	unsigned long long	key;    /* número: ex. 20, 100, 1000               */
-	char				*value; /* palavra: ex. "vinte", "cem"              */
-	struct s_entry		*next;  /* ← referencia s_entry pois t_entry ainda
-	                               não existe neste ponto da declaração    */
-}	t_entry;                    /* ← alias público; use sempre t_entry     */
+	unsigned long long	key; /* número: ex. 20, 100, 1000 */
+	char				*value; /* palavra: ex. "vinte", "cem" */
+	struct s_entry		*next; /* ← referencia s_entry pois t_entry
+	                              ainda não existe neste ponto */
+}	t_entry; /* ← alias público; use sempre t_entry */
 
 void		free_dict(t_entry *dict);
 char		*dict_lookup(t_entry *dict, unsigned long long key);

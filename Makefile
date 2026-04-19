@@ -18,8 +18,11 @@ CFLAGS	= -Wall -Wextra -Werror
 # Agora temos múltiplos módulos em vez de um único arquivo.
 SRCS	= main.c \
 		  utils.c \
+		  fileio.c \
 		  dict.c \
-		  number.c
+		  parse_dict.c \
+		  number.c \
+		  write_number.c
 
 # Gera a lista de arquivos objeto (.o) substituindo .c por .o em cada nome.
 # Resultado: main.o utils.o dict.o number.o
