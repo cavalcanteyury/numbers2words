@@ -1,20 +1,9 @@
-/*
-** main.c
-** Ponto de entrada do programa.
-** Coordena os outros módulos: lê argumentos, carrega o dicionário,
-** chama a conversão e cuida de liberar a memória.
-*/
 #include <unistd.h>
 #include <stdlib.h>
 #include "utils.h"
 #include "dict.h"
 #include "number.h"
 
-/*
-** Preenche *path e *num a partir dos argumentos da linha de comando.
-** argc == 2 → dicionário padrão; argc == 3 → dicionário customizado.
-** Retorna 1 em sucesso, 0 em caso de uso incorreto.
-*/
 static int	get_args(int argc, char **argv, const char **path, const char **num)
 {
 	if (argc == 2)
@@ -32,11 +21,6 @@ static int	get_args(int argc, char **argv, const char **path, const char **num)
 	return (1);
 }
 
-/*
-** Lê o arquivo de dicionário e o converte em lista ligada.
-** Libera o conteúdo bruto do arquivo após o parse.
-** Retorna a lista, ou NULL em caso de erro.
-*/
 static t_entry	*load_dict(const char *path)
 {
 	char	*content;
@@ -50,10 +34,6 @@ static t_entry	*load_dict(const char *path)
 	return (dict);
 }
 
-/*
-** Executa a conversão e escreve o resultado, liberando o dicionário ao final.
-** Retorna 0 em sucesso, 1 se alguma chave necessária não for encontrada.
-*/
 static int	run(t_entry *dict, unsigned long long n)
 {
 	if (!write_number(dict, n))

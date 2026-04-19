@@ -1,17 +1,7 @@
-/*
-** parse_dict.c
-** Análise do conteúdo do arquivo de dicionário:
-** leitura linha a linha e construção da lista ligada.
-*/
 #include <stdlib.h>
 #include "utils.h"
 #include "dict.h"
 
-/*
-** Lê o valor após o ':' em uma linha do dicionário.
-** Pula espaços iniciais, localiza o texto e aplica trim direito.
-** Retorna 1 com *value preenchido, ou -1 em caso de erro.
-*/
 static int	parse_value(const char *line, int i, char **value)
 {
 	int		start;
@@ -33,15 +23,6 @@ static int	parse_value(const char *line, int i, char **value)
 	return (1);
 }
 
-/*
-** Analisa uma única linha do dicionário.
-** Formato esperado: <número> : <valor>
-**
-** Retorna:
-**    1 → linha válida (key e *value preenchidos)
-**    0 → linha vazia (ignorar)
-**   -1 → erro de formato
-*/
 static int	parse_line(const char *line, unsigned long long *key, char **value)
 {
 	int					i;
@@ -68,9 +49,6 @@ static int	parse_line(const char *line, unsigned long long *key, char **value)
 	return (parse_value(line, i + 1, value));
 }
 
-/*
-** Avança o índice 'i' para o início da próxima linha no buffer.
-*/
 static int	next_line(const char *content, int i)
 {
 	while (content[i] && content[i] != '\n')
@@ -80,11 +58,6 @@ static int	next_line(const char *content, int i)
 	return (i);
 }
 
-/*
-** Aloca um novo nó com key/value e o insere no início da lista (prepend).
-** Inserção no início é O(1) e evita percorrer a lista toda.
-** Em caso de falha de malloc, libera value e toda a lista existente.
-*/
 static t_entry	*make_entry(t_entry *dict, unsigned long long key, char *value)
 {
 	t_entry	*entry;
@@ -102,11 +75,6 @@ static t_entry	*make_entry(t_entry *dict, unsigned long long key, char *value)
 	return (entry);
 }
 
-/*
-** Analisa o conteúdo completo do arquivo de dicionário linha por linha.
-** Monta e retorna a lista ligada de entradas.
-** Retorna NULL em caso de erro de formato ou falha de memória.
-*/
 t_entry	*parse_dict(const char *content)
 {
 	t_entry				*dict;

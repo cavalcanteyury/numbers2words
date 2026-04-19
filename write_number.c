@@ -1,17 +1,7 @@
-/*
-** write_number.c
-** Converte e escreve um número em palavras, e analisa o argumento numérico.
-*/
 #include "utils.h"
 #include "dict.h"
 #include "number.h"
 
-/*
-** Converte e escreve o número completo dividindo em grupos:
-**   bilhões → milhões → milhares → resto (<1000)
-**
-** Retorna 1 em sucesso, 0 se alguma chave necessária não for encontrada.
-*/
 int	write_number(t_entry *dict, unsigned long long n)
 {
 	char	*word;
@@ -37,16 +27,6 @@ int	write_number(t_entry *dict, unsigned long long n)
 	return (1);
 }
 
-/*
-** Converte a string 's' para um número inteiro sem sinal.
-** Rejeita números acima de UINT_MAX (4.294.967.295).
-**
-** Preenche *out e retorna 0 em sucesso, -1 em erro.
-**
-** Verificação de overflow antes de cada multiplicação:
-**   429.496.729 × 10 + 5 = 4.294.967.295 = UINT_MAX (exato) ✓
-**   429.496.729 × 10 + 6 = 4.294.967.296 > UINT_MAX         ✗
-*/
 int	parse_number_arg(const char *s, unsigned long long *out)
 {
 	unsigned long long	n;

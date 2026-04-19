@@ -1,11 +1,3 @@
-/*
-** number.h
-** Cabeçalho do módulo de conversão numérica.
-**
-** Inclui dict.h porque as funções deste módulo recebem
-** um t_entry* como parâmetro — o compilador precisa conhecer
-** a definição de t_entry para entender as assinaturas.
-*/
 #ifndef NUMBER_H
 # define NUMBER_H
 
