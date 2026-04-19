@@ -2,30 +2,58 @@
 *.d
 
 # Object files
-*.o *.ko *.obj *.elf *.slo *.lo
+*.o
+*.ko
+*.obj
+*.elf
+*.slo
+*.lo
 
 # Precompiled Headers
-*.gch *.pch
+*.gch
+*.pch
 
 # Linker output
-*.ilk *.map *.exp
+*.ilk
+*.map
+*.exp
 
 # Libraries
-*.lib *.a *.la *.lo
+*.lib
+*.a
+*.la
 
 # Shared objects (inc. Windows DLLs)
-*.dll *.so *.so.* *.dylib
+*.dll
+*.so
+*.so.*
+*.dylib
 
 # Executables
-*.exe *.out *.app *.i*86 *.x86_64 *.hex
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+numbers2words
 
 # Debug files
-*.dSYM/ *.su *.idb *.pdb
+*.dSYM/
+*.su
+*.idb
+*.pdb
 
 # Kernel Module Compile Results
-*.mod* *.cmd .tmp_versions/ modules.order Module.symvers Mkfile.old dkms.conf
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
 
 # IDE and OS specific files
 *.swp
 ~
-.thumbs.db   
+.thumbs.db
