@@ -75,7 +75,7 @@ char	*substr(const char *s, int start, int end)
 /*
 ** Abre o arquivo em 'path' e lê todo o conteúdo para uma string no heap.
 **
-** Como não temos realloc, a cada chunk lido de 4096 bytes:
+** A cada chunk lido de 4096 bytes:
 **   1. Aloca um buffer novo (total atual + chunk + 1 para '\0')
 **   2. Copia o conteúdo antigo + novo chunk para o buffer novo
 **   3. Libera o buffer antigo
@@ -97,6 +97,14 @@ char	*read_file(const char *path)
 		return (NULL);
 	content = NULL;
 	total = 0;
+
+	/*
+	** A estratégia é:
+	** a cada iteração, alocar um buffer novo do tamanho total acumulado
+	** (total) + o chunk recém lido (n) + 1 byte para o '\0' final.
+	** Depois copiamos o conteúdo antigo e o novo chunk para esse buffer,
+	** liberamos o buffer anterior e repetimos até EOF - END OF FILE (read retorna 0).
+	*/
 	while ((n = (int)read(fd, buf, sizeof(buf))) > 0)
 	{
 		tmp = malloc(total + n + 1);
@@ -106,13 +114,15 @@ char	*read_file(const char *path)
 			close(fd);
 			return (NULL);
 		}
+		/* Copia o conteúdo já acumulado para o novo buffer */
 		i = 0;
 		while (i < total) { tmp[i] = content[i]; i++; }
+		/* Acrescenta o chunk recém lido logo após o conteúdo anterior */
 		i = 0;
 		while (i < n) { tmp[total + i] = buf[i]; i++; }
 		total += n;
-		tmp[total] = '\0';
-		free(content);
+		tmp[total] = '\0'; /* Garante que a string sempre termina com '\0' */
+		free(content);     /* Libera o buffer antigo; tmp passa a ser o atual */
 		content = tmp;
 	}
 	close(fd);

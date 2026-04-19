@@ -60,12 +60,15 @@ static int	parse_line(const char *line, unsigned long long *key, char **value)
 	int					end;
 
 	i = 0;
+	/* Pula espaços/tabs no início da linha */
 	while (ft_isspace(line[i]))
 		i++;
+	/* Linha em branco ou fim de string → ignorar (retorna 0, não é erro) */
 	if (line[i] == '\n' || line[i] == '\0')
 		return (0);
 	if (!ft_isdigit(line[i]))
 		return (-1);
+	/* Converte a sequência de dígitos para número */
 	n = 0;
 	while (ft_isdigit(line[i]))
 	{
@@ -79,12 +82,20 @@ static int	parse_line(const char *line, unsigned long long *key, char **value)
 	i++;
 	while (ft_isspace(line[i]))
 		i++;
+	/* 'start' aponta para o primeiro caractere do valor */
 	start = i;
+	/* Avança até o fim da linha para encontrar onde o valor termina */
 	while (line[i] && line[i] != '\n')
 		i++;
 	end = i;
+	/*
+	** Remove espaços/tabs no final do valor (trim direito).
+	** Decrementamos 'end' enquanto o caractere antes dele for espaço.
+	** Ao final, substr(line, start, end) captura só o texto sem espaços.
+	*/
 	while (end > start && ft_isspace(line[end - 1]))
 		end--;
+	/* Se após o trim não sobrou nada entre ':' e '\n', o formato é inválido */
 	if (end <= start)
 		return (-1);
 	*key = n;
@@ -99,6 +110,7 @@ static int	parse_line(const char *line, unsigned long long *key, char **value)
 ** Monta e retorna a lista ligada de entradas.
 ** Retorna NULL em caso de erro de formato.
 */
+
 t_entry	*parse_dict(const char *content)
 {
 	t_entry				*dict;
@@ -112,6 +124,11 @@ t_entry	*parse_dict(const char *content)
 	i = 0;
 	while (content[i])
 	{
+		/*
+		** 'content + i' é um ponteiro para o início da linha atual dentro
+		** do buffer completo. parse_line lê a partir desse ponto sem
+		** precisar de uma cópia separada da linha.
+		*/
 		result = parse_line(content + i, &key, &value);
 		if (result == -1)
 		{
@@ -129,9 +146,15 @@ t_entry	*parse_dict(const char *content)
 			}
 			entry->key = key;
 			entry->value = value;
+			/*
+			** Inserção no início da lista (prepend): o novo nó aponta para
+			** o topo atual e passa a ser o novo topo. É O(1) e evita
+			** percorrer a lista toda só para inserir no final.
+			*/
 			entry->next = dict;
 			dict = entry;
 		}
+		/* Avança 'i' até o '\n' para posicionar no início da próxima linha */
 		while (content[i] && content[i] != '\n')
 			i++;
 		if (content[i] == '\n')

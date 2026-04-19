@@ -42,6 +42,12 @@ static int	write_below_thousand(t_entry *dict, unsigned long long n)
 
 	if (n >= 100)
 	{
+		/*
+		** Para centenas: n/100 dá o dígito das centenas (ex.: 342 → 3).
+		** Buscamos a palavra do dígito (ex.: "três") e depois a palavra
+		** de 100 (ex.: "cem"/"cento"), escrevendo as duas em sequência.
+		** n %= 100 descarta a parte das centenas e continua com o resto.
+		*/
 		word = dict_lookup(dict, n / 100);
 		if (!word) return (0);
 		put_word(word);
@@ -52,6 +58,12 @@ static int	write_below_thousand(t_entry *dict, unsigned long long n)
 	}
 	if (n >= 20)
 	{
+		/*
+		** Para dezenas de 20 a 99: (n / 10) * 10 arredonda para a dezena
+		** exata (ex.: 42 → 4 → 40) e buscamos essa chave no dicionário.
+		** n %= 10 pega a unidade restante (ex.: 42 → 2) para ser tratada
+		** no próximo if — mas só se n > 0 após o módulo (ex.: 40 não tem unidade).
+		*/
 		word = dict_lookup(dict, (n / 10) * 10);
 		if (!word) return (0);
 		put_word(word);
@@ -65,6 +77,10 @@ static int	write_below_thousand(t_entry *dict, unsigned long long n)
 	}
 	else if (n > 0)
 	{
+		/*
+		** Números de 1 a 19 têm palavras próprias no dicionário (não seguem
+		** a lógica dezena+unidade), então buscamos diretamente pela chave.
+		*/
 		word = dict_lookup(dict, n);
 		if (!word) return (0);
 		put_word(word);
@@ -143,11 +159,20 @@ int	parse_number_arg(const char *s, unsigned long long *out)
 	while (ft_isdigit(s[i]))
 	{
 		digit = (unsigned long long)(s[i] - '0');
+		/*
+		** Verificação de overflow ANTES de multiplicar para não ultrapassar
+		** UINT_MAX (4.294.967.295). A lógica é:
+		**   - Se n > 429.496.729, qualquer dígito a seguir já estoura.
+		**   - Se n == 429.496.729, só dígito ≤ 5 ainda cabe (…295 é o limite).
+		** Fazemos isso com inteiros maiores (unsigned long long) para a
+		** comparação ser segura antes de realizar a operação n*10+digit.
+		*/
 		if (n > 429496729ULL || (n == 429496729ULL && digit > 5))
 			return (-1);
 		n = n * 10 + digit;
 		i++;
 	}
+	/* Se ainda há caracteres não-dígito após o número, o argumento é inválido */
 	if (s[i] != '\0')
 		return (-1);
 	*out = n;
